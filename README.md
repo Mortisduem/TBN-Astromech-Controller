@@ -9,7 +9,7 @@ This is a custom electronic package for dome rotation, sound, and motion inspire
 
 ## Intro
 
-This is a flexible control system for 1:1 scale remote controlled Astromech that was inspired by the padawan360 system by dankraus. It is capable of translating input from PWM, IBUS or SBUS RC systems to be able to control foot, dome, and shoulder drive motors. As well as being able to trigger lights, sounds, run programmed animations or any thing else over I2C. The core to the system is the use of a Arduino Mega 2650 that serves as the hub of the system
+This is a flexible control system for 1:1 scale remote controlled Astromech that was inspired by the padawan360 system by dankraus. It is capable of translating input from PWM, IBUS or SBUS RC systems to be able to control foot, dome, and shoulder drive motors. As well as being able to trigger lights, sounds, run programmed animations or any thing else over I2C. The core to the system is the use of a Arduino Mega 2650 that serves as the hub of the system, with the use of other Arduino boards to handle things like lights and sounds.
 
 ## Currently Supported Features
 - ### Flexible Remote Control connections to provide flexible control schemes
