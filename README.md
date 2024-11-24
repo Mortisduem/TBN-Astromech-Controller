@@ -1,5 +1,5 @@
 # TBN Astromech Control System
-This is a custom electronic package for dome rotation, sound, and motion inspired by the Padawan360 (https://github.com/dankraus/padawan360) control system using RC remotes instead of the Xbox USB Receiver typically used.
+The "To Be Named" Control System is a custom electronic package for dome rotation, sound, and motion inspired by the Padawan360 (https://github.com/dankraus/padawan360) control system using RC remotes instead of the Xbox USB Receiver typically used.
 
 ## Contents
 - [TBN Astromech Control System](#TBN)
@@ -9,11 +9,11 @@ This is a custom electronic package for dome rotation, sound, and motion inspire
 
 ## Intro
 
-This is a flexible control system for 1:1 scale remote controlled Astromech that was inspired by the padawan360 system by dankraus. It is capable of translating input from PWM, IBUS or SBUS RC systems to be able to control foot, dome, and shoulder drive motors. As well as being able to trigger lights, sounds, run programmed animations or any thing else over I2C. The core to the system is the use of a Arduino Mega 2650 that serves as the hub of the system
+This is a flexible control system for 1:1 scale remote controlled Astromech that was inspired by the padawan360 system by dankraus. It is capable of translating input from PWM, IBUS or SBUS RC systems to be able to control foot, dome, and shoulder drive motors. As well as being able to trigger lights, sounds, run programmed animations or any thing else over I2C. The core to the system is the use of a Arduino Mega 2650 that serves as the hub of the system, with the use of other Arduino boards to handle things like lights and sounds.
 
 ## Currently Supported Features
-- ### Flexible Remote Control connections to provide flexible control schemes
-  #### 10 Channel raw PWM
+- ### Flexible Remote Control connections to provide flexible input of controls
+  #### 10 Channel PWM
   The most universal way of receiving radio control data from a remote, limited to 10 channels due to polling rate of the Mega. By default these channels are mapped to digital pins 2 - 11 to be mapped as channels 0-9 for control of functions. This mode currently does not enable controlling the foot drive mix, so I recommend connecting the 2 PWM channels mixed to drive the droid from the receiver directly to a Cytron MDDS30 or Sabertooth motor driver in PWM mode. 
   #### FrSky IBUS
   A non-inverted Serial communication used by some FrSky remote systems, limited to 14 channels of control and mapped to channels 0-13 for assignment. Serial3 is used to receive the data from the receiver on the Mega, connect pin 15 to the servo data port on the receiver. While the protocol supports two way communications, only receive is used currently
