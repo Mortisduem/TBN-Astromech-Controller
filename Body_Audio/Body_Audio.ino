@@ -3,6 +3,8 @@ Audio Control to be located in the body of the droid.
   - Converts I2C bytes as commands to Serial instructions for a DY MP3 Player
   - I2C Adress is set in Device_Adresses.h
   - 2nd to last Byte is Volume, Last Byte is Track to Play. Other Bytes will be dropped
+  - Serial is not available for debug due to use of CY player on the serial
+  - counts of tracks are set in \config\Device_Adresses.h
 */
 #include <Wire.h>
 #include <Arduino.h>

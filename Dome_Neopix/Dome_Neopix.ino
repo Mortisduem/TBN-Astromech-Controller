@@ -1,6 +1,21 @@
-// NeoPixel test program showing use of the WHITE channel for RGBW
-// pixels only (won't look correct on regular RGB NeoPixel strips).
-
+/*
+Dome Lighting Control board for TBN Controler system
+I2C input to select the lighting mode, board controls some basic lighting animations to offload from the main hub.
+Preprogrammed modes for each bank are
+ 0 - Lights Off (Clears 
+ 1 - All White
+ 2 - All Red
+ 3 - All Green
+ 4 - All Blue
+ 5 - All Yellow
+ 6 - All Purple
+ 7 - All Cyan
+ 8 - Disco, Random color to Random Pixels
+ 9 - Theater Left
+10 - Theater Right
+11 - Police Bar
+12 - Mannualy writen from Hub controler, sets ranges of leds to a requested color
+*/
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <Wire.h>

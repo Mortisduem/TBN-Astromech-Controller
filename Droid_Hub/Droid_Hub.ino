@@ -1,5 +1,5 @@
 /*
-Main Hub of the Droid Control on an Arduino Mega
+Main Hub of the Droid Control on an Arduino Mega 2650
 - Read SBUS in on serial3 and save to data array (serial inverter needed for good reads)
 - AnimationConfig.h Stores Global constants and varibles for:
   - Sbus switch sets
@@ -57,7 +57,7 @@ Main Hub of the Droid Control on an Arduino Mega
 void setup() {
   //Start I2C bus with Mega as master and 
   Serial.begin(115200);
-  Serial.print("Dark Saber Hub version:");
+  Serial.print("TBN Hub version:");
   if (version < 0){
     Serial.println("β."+String(0-version));
   }
