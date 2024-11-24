@@ -14,6 +14,10 @@ Main Hub of the Droid Control on an Arduino Mega 2650
 - Dome Cytron is PWM and Direction Pin
 - Animation Loop Handled localy
 */
+
+#include "d:\GitHub\TBN-Astromech-Controller\config\Body_Config.h"
+#include "d:\GitHub\TBN-Astromech-Controller\config\Device_Adresses.h"
+
 #include <Arduino.h>
 #include <Smoothed.h>
 #include <Wire.h>
@@ -115,7 +119,7 @@ void setup() {
   Serial.println("  -Setting hub PWM out to High Freq");
   triggerI2C(dome_lights,1);
   triggerI2C(body_lights,1);
-  //Update PWMs to High Freq
+  //Update on board PWMs to High Freq to limit whine of Motor Drivers
   int erase = 7;
   TCCR1B &= ~erase; // cancel pre-scaler of 64
   TCCR2B &= ~erase;
@@ -139,15 +143,15 @@ void setup() {
   switch(Dome_Drive){
 	  case 1:
 		Serial.println("  - Starting PWM+DIR Drive for Dome");
-		pinMode(12, OUTPUT); //Pin 12 for dome drive PWM
-		digitalWrite(12,LOW);
-		pinMode(13, OUTPUT); //Dome Dir
-		digitalWrite(13,LOW);
+		pinMode(DD_PWN_PIN, OUTPUT); //DD_PWN_PIN for dome drive PWM
+		digitalWrite(DD_PWN_PIN,LOW);
+		pinMode(DD_DIR_PIN, OUTPUT); //Dome Dir
+		digitalWrite(DD_DIR_PIN,LOW);
 		break;
 	  case 2:
 		Serial.println("  - Starting PWM Drive for Dome");
-		pinMode(12, OUTPUT); //Pin 12 for dome drive PWM
-		digitalWrite(12,LOW);
+		pinMode(DD_PWN_PIN, OUTPUT); //DD_PWN_PIN for dome drive PWM
+		digitalWrite(DD_PWN_PIN,LOW);
 		break;
 	  case 3:
 		//Syren WIP will disable Serial2 due to 
@@ -164,20 +168,23 @@ void setup() {
   //DS_RC.go(0,1);
   //DS_Ani.go(0,1);
   //triggerI2C(dome_lights,2);
-  switch  (Remote_Mode){
-	  case 10:
+  switch  (Foot_Drives){
+	  case 0:
 	  Serial.println("  -No Driver control Enabled\n\tNOTE: RC PWM mode in use, No Drive Serial enabled, Wire PWM signal to Drive motor directly");
 	  break;
-	  case 0:
+	  case 1:
 	  Serial.println("  -Staring Coms for Cytron_SmartDriveDuos:");
 	  delay(2000); // Delay for 2 seconds before starting seria1 for the leg drives.
 	  Serial.println("    - Foot Driver");
 	  smartDrive.initialByte(0x80); // MDDS30
+	  case 2:
+	  Serial.println("ERROR - Sabertooth not Supported yet");
+	  break;
+	  case 10:
+	  Serial.println("  - PWM for motordrives out on pins :" + String(FD_PWM_LEFT) + " & " + String(FD_PWM_RIGHT));
+	  break;
 	  default:
-	  Serial.println("\tStaring Coms for Cytron_SmartDriveDuos");
-	  delay(2000); // Delay for 2 seconds before starting seria1 for the leg drives.
-	  Serial.println("    - Foot Driver");
-	  smartDrive.initialByte(0x80); // MDDS30
+	  Serial.println("ERROR: Bad Motor Driver Config");
 	  break;
   }
   triggerI2C(dome_lights,3);
@@ -477,42 +484,44 @@ void homebodyservos(){
 }
 
 void body_motion(){	
-	switch (Remote_Mode){
+	Drive_Right = map(data.ch[Drive_LR_CH], r_min, r_max, -100 , 100); 
+	Drive_Forward = map(data.ch[Drive_FB_CH], r_min, r_max, -100 , 100);
+	Drive_Dome = map(data.ch[Drive_Dome_CH], r_min, r_max, -150 , 150);   	//Dome Move
+	Drive_Mix();
+	switch (Foot_Drives){
 		case 10:
 			//RC PWM signals wired directly to Cytron Motor Drivers
+			analogWrite(FD_PWM_LEFT, speedLeft);
+			analogWrite(FD_PWM_RIGHT, speedRight);
 			break;
-		default:
-			Drive_Right = map(data.ch[Drive_LR_CH], r_min, r_max, -100 , 100); 
-			Drive_Forward = map(data.ch[Drive_FB_CH], r_min, r_max, -100 , 100);
-			Drive_Dome = map(data.ch[Drive_Dome_CH], r_min, r_max, -150 , 150);   	//Dome Move
-			Drive_Mix();
-			dome_move();
+		case 1:
+			smartDrive.control(speedLeft, speedRight);
 			break;
 	}
   
-  if(Shoulder_homed and Leg_232){
-	  moveSholders();
-  }
-  arms();
-  smartDrive.control(speedLeft, speedRight);
+	if(Shoulder_homed and Leg_232){
+		moveSholders();
+	}
+	dome_move();
+	arms();
 }
 
 void dome_move(){		//Move Dome
   //Dome movement
 					 
   if((Drive_Dome) < 0){
-      digitalWrite(13,HIGH);
+      digitalWrite(DD_DIR_PIN,HIGH);
   }
   else if((Drive_Dome) > 0){
-      digitalWrite(13,LOW);
+      digitalWrite(DD_DIR_PIN,LOW);
   }
   else{
       Drive_Dome = 0;
-      digitalWrite(13,LOW);
+      digitalWrite(DD_DIR_PIN,LOW);
   }
   test = abs(Drive_Dome) + Dome_Ani_Speed;
   RC_DomeSpeed = constrain(test,0, 150);
-  analogWrite(12,RC_DomeSpeed);
+  analogWrite(DD_PWN_PIN, RC_DomeSpeed);
 }
 
 void Drive_Mix(){		//Mix Drives for Foot Drives

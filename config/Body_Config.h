@@ -8,7 +8,7 @@ Control interface or how we connect the Reciever to the Droid
    0 - No Remote bypasses polling of remote, use Serial terminal to command droid
    1 - SBUS serial 16 Channels Max (0-15) requires inverting signal to work
    2 - IBUS serial 14 Channels Max (0-13)
-   10 - Raw PWM signaling  10 Channels Max, recomend wiring PWM for drives directly to Cytron Drives as  
+  10 - Raw PWM signaling  10 Channels Max, recomend wiring PWM for drives directly to Cytron Drives as  
 */
 #define Remote_Mode 1
 
@@ -17,8 +17,11 @@ Foot Motor controller options
    0 - No Motor Drivers
    1 - Cytron MDDS30
    2 - Sabertooth (not supported yet)
+  10 - PWN Out, on Mega
 */
 #define Foot_Drives 1
+#define FD_PWM_LEFT  46
+#define FD_PWM_RIGHT 44
 
 /*
 Dome Motor Control
@@ -32,11 +35,10 @@ Dome Motor Control
 #define DD_DIR_PIN 13
 
 /*
-Shoulder Motor Control currently only suports the Cytron MDDS10
-Switching of legs between 2 and 3 leg mode
+Shoulder Motor Control currently only suports the Cytron MDDS10 for basic switching of legs between 2 and 3 leg mode
 Leg_Slow is the pressentage to slow down drive speed, only used while not in 3 leg mode with back endstops triggered and 2-3-2 option is enabled
 */
-bool Leg_232 = true;
+#define Leg_232 1
 const int Leg_Slow = 50;
 
 /*
@@ -162,10 +164,10 @@ No changes should be needed after this point
 Values asigned here are boot defaults and may change depending on droid state and enabled options
 */
 //Light tracking and other variables
-byte domeA_mode;
-byte domeB_mode;
-byte neck_mode;
-byte door_mode;
+int domeA_mode;
+int domeB_mode;
+int neck_mode;
+int door_mode;
 char inChar;
 int sound_select;
 int Drive_Right; 
@@ -186,7 +188,7 @@ bool LR;
 bool Shoulder_homed = true;
 
 //MB: Holoprojector amimaton variables...
- boolean isHPOn = false;
+ bool isHPOn = false;
  int HoloAni1a = 0; //Holo animation counter
  int HoloAni1b = 0; //Holo animation counter 2
  unsigned int Animation_Pedro;
@@ -214,9 +216,6 @@ unsigned int sef_start;
 unsigned int mus_count;
 unsigned int mus_start;
 
-//Body Animations
-uint8_t servonum = 0;
-
 // Door Open logic tracking
 bool Gripper_Door = false;
 bool Interface_Door = false;
@@ -225,3 +224,5 @@ bool Data_Door = false;
 //sub board coms check
 bool body_servo_good = false;
 
+
+const int SABERTOOTHBAUDRATE = 9600;
