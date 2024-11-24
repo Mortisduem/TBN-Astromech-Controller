@@ -49,4 +49,4 @@ This is a flexible control system for 1:1 scale remote controlled Astromech that
   Functions can be remapped to different RC channels to better accommodate remotes with fewer available channels. 
   
 - ### Independent Audio Control 
-  Uses a Arduino Nano to translate I2C commands to Serial to use a DY MP3 player or similar boards.
+  Use an Arduino Nano to translate I2C commands to Serial for a DY MP3 player or similar boards.
