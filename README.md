@@ -1,4 +1,4 @@
-#TBN Astromech Control System
+# TBN Astromech Control System
 This is a customizable electronic package for dome rotation, sound, and motion inspired by the Padawan360 (https://github.com/dankraus/padawan360) control system using RC remotes instead of the Xbox USB Reciver typicaly used.
 
 ## Contents
@@ -14,5 +14,12 @@ This is a felxible control system for 1:1 scale remote controled Astromech that 
 ## Currently Suported Features
 - ### Flexible Remote Control connections to provide flexible control schemes
  #### 10 Channel raw PWM
-    The most universal way of receiving radio control data from a remote, limited to 10 channels due to polling rate of the input. By default these channels are mapped to digital pins 2 threw 11
-
+   The most universal way of receiving radio control data from a remote, limited to 10 channels due to polling rate of the Mega. By default these channels are mapped to digital pins 2 - 11 to be mapped as channels 0-9 for control of functions. This mode currently does not enable controling the foot drive mix, so I recomend connecting the 2 PWM channels mixed to drive the droid from the reciever dirrectly to a Cytron MDDS30 or Sabertooth motor driver in PWM mode. 
+ #### FrSky IBUS
+   A non-inverted Serial comunication used by some FrSky remote systems, limited to 14 channels of control and mapped to channels 0-13 for assignment. Serial3 is used to receive the data from the receiver on the Mega, connect pin 15 to the servo data port on the receiver. While the protocal supports two way communications, only recive is used currently
+ #### Futuba and FrSky SBUS
+   A inverted Serial comunication commonly used by Futaba and FrSky remote systems, limited to 16 channels and mapped to channels 0-15 for assignment.Serial3 is used to receive the data from the receiver on the Mega, connect pin 15 to the assigned channel used for Sbus out on the receiver, this will depend on how your transmitter and receiver are setup. 
+  
+- ### Flexible Foot Drive Control Options
+#### Cytron MDDS30 Motor Driver
+  Support for the Cytron MDDS30 motor driver in simple serial mode to control the feet of the droid, connected to the Mega on Serial1. While limited to 60amps peak and 30 amps cont. it is still a good match for most droids. This controler lacks some of the extra features of the Sabertooth 32a.
