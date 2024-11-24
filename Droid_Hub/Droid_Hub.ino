@@ -22,6 +22,7 @@ Main Hub of the Droid Control on an Arduino Mega
 //#include <Adafruit_ADXL345_U.h>
 #include "headers\sbus.h"
 #include <IBusBM.h>
+#include "headers\Sabertooth.h"
 #include "headers\Cytron_SmartDriveDuo.h"	// Altered Header file to use Serial 1 not Serial 0 on mega board for Smartdrive control
 
 //#include "DYPlayerArduino.h"
@@ -269,7 +270,7 @@ void Sbus_Setup(){	// Setup Sbus Comunication
 
 void Ibus_Setup(){	// Setup Ibus Comunication
 	//PENDING
-	IBus.begin(Serial2);
+	IBus.begin(Serial3);
 	Serial.println("    - Waiting for Good Ibus Data...");
 	while (IBus.cnt_rec==0) delay(100);
 	r_min = ibus_min;
