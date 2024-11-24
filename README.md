@@ -1,2 +1,2 @@
-# TBN-Astromech-Controller
-This is a customizable electronic package for dome rotation, sound, and motion inspired by the Padawan360  control system but uses multi channel RC transmitters and receivers. 
+# Arduino Astromech Control System
+This is a customizable electronic package for dome rotation, sound, and motion inspired by the Padawan360 (https://github.com/dankraus/padawan360) control system but uses RC remotes instead of the Xbox USB Reciver
