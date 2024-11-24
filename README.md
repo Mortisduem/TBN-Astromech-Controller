@@ -1,5 +1,5 @@
 # TBN Astromech Control System
-This is a customization electronic package for dome rotation, sound, and motion inspired by the Padawan360 (https://github.com/dankraus/padawan360) control system using RC remotes instead of the Xbox USB Receiver typically used.
+This is a custom electronic package for dome rotation, sound, and motion inspired by the Padawan360 (https://github.com/dankraus/padawan360) control system using RC remotes instead of the Xbox USB Receiver typically used.
 
 ## Contents
 - [TBN Astromech Control System](#TBN)
