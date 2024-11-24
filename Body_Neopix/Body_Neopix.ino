@@ -17,7 +17,7 @@ Preprogrammed modes for each bank are
 12 - Mannualy writen from Hub controler, sets ranges of leds to a requested color
 */
 
-#include <Adafruit_NeoPixel.h>
+#include <Adafruit_NeoPixel.h> 
 #include <Adafruit_PWMServoDriver.h>
 #include <Wire.h>
 #include <LedControl.h>
