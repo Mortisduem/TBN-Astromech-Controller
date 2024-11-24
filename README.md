@@ -30,14 +30,10 @@ This is a flexible control system for 1:1 scale remote controlled Astromech that
   Support for the [Cytron MDDS30](https://www.cytron.io/p-30amp-7v-35v-smartdrive-dc-motor-driver-2-channels) motor driver in simple serial mode, connected to the Mega on Serial1. While limited to 60amps peak and 30 amps cont. it is still a good match for most droids. This controller lacks some of the extra features of the Sabertooth 32a.
   #### PWM Signals
   Mixed PWM signal output on the board for other Motor Controllers   
-  #### Sabertooth Motor Driver
-  Support for Sabertooth motor controllers is planned but currently not implemented due to conflicts with Cytron controllers.
 
 - ### Dome Drive Motor Control Options
   #### PWM Signaling
   PWM signal with option of Direction signal to control generic RC ESCs or other compatible motor controllers like the Cytron MD10C
-  #### Syren 10
-  Support planed but not implemented yet due to conflicts with Cytron controllers
   
 - ### Basic Switch of Leg Modes
   Support to switch between 2 and 3 leg modes with use of two motors being driven by a Cytron MDDS10. Left and right side shoulders driven independently. Control will set a speed limit of foot drives while not in 3 leg mode to help limit tip over.
@@ -50,3 +46,7 @@ This is a flexible control system for 1:1 scale remote controlled Astromech that
   
 - ### Independent Audio Control 
   Use an Arduino Nano to translate I2C commands to Serial for a DY MP3 player or similar boards.
+
+## Planned Features
+  ### Sabertooth Motor Driver Support
+  Support for Sabertooth motor controllers is planned but currently not implemented due to conflicts with Cytron controllers.
