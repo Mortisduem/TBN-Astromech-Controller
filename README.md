@@ -20,6 +20,14 @@ This is a felxible control system for 1:1 scale remote controled Astromech that 
  #### Futuba and FrSky SBUS
    A inverted Serial comunication commonly used by Futaba and FrSky remote systems, limited to 16 channels and mapped to channels 0-15 for assignment.Serial3 is used to receive the data from the receiver on the Mega, connect pin 15 to the assigned channel used for Sbus out on the receiver, this will depend on how your transmitter and receiver are setup. 
   
-- ### Flexible Foot Drive Control Options
+- ### Foot Drive Motor Control Options
 #### Cytron MDDS30 Motor Driver
-  Support for the Cytron MDDS30 motor driver in simple serial mode to control the feet of the droid, connected to the Mega on Serial1. While limited to 60amps peak and 30 amps cont. it is still a good match for most droids. This controler lacks some of the extra features of the Sabertooth 32a.
+  Support for the Cytron MDDS30 motor driver in simple serial mode, connected to the Mega on Serial1. While limited to 60amps peak and 30 amps cont. it is still a good match for most droids. This controler lacks some of the extra features of the Sabertooth 32a.
+#### Dimension Engineering Sabertooth Motor Driver
+  Basic suport for the Sabertooth over serial.
+  
+- ### Dome Drive Motor Control Options
+#### PWM Signaling
+  PWM signal with option of Direction signal to control genaric RC ESCs and compatible motor controllers like the Cytron MD10C
+#### Syren 10
+  
