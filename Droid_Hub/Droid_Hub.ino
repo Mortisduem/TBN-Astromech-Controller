@@ -490,9 +490,11 @@ void body_motion(){
 	Drive_Mix();
 	switch (Foot_Drives){
 		case 10:
-			//RC PWM signals wired directly to Cytron Motor Drivers
-			analogWrite(FD_PWM_LEFT, speedLeft);
-			analogWrite(FD_PWM_RIGHT, speedRight);
+			//RC PWM			
+			int pwmLeft = map(speedLeft,-100,100,0,255);
+			int pwmRight = map(speedRight.-100,100,0,255);
+			analogWrite(FD_PWM_LEFT, pwmLeft);
+			analogWrite(FD_PWM_RIGHT, pwmRight);
 			break;
 		case 1:
 			smartDrive.control(speedLeft, speedRight);
@@ -508,20 +510,26 @@ void body_motion(){
 
 void dome_move(){		//Move Dome
   //Dome movement
-					 
-  if((Drive_Dome) < 0){
-      digitalWrite(DD_DIR_PIN,HIGH);
-  }
-  else if((Drive_Dome) > 0){
-      digitalWrite(DD_DIR_PIN,LOW);
-  }
-  else{
-      Drive_Dome = 0;
-      digitalWrite(DD_DIR_PIN,LOW);
-  }
-  test = abs(Drive_Dome) + Dome_Ani_Speed;
-  RC_DomeSpeed = constrain(test,0, 150);
-  analogWrite(DD_PWN_PIN, RC_DomeSpeed);
+  switch (Dome_Drive){
+		case 1:
+		if((Drive_Dome) < 0){
+			digitalWrite(DD_DIR_PIN,HIGH);
+		}
+		else if((Drive_Dome) > 0){
+			digitalWrite(DD_DIR_PIN,LOW);
+		}
+		else{
+			Drive_Dome = 0;
+			digitalWrite(DD_DIR_PIN,LOW);
+		}
+		test = abs(Drive_Dome) + Dome_Ani_Speed;
+		RC_DomeSpeed = constrain(test,0, 150);
+		analogWrite(DD_PWN_PIN, RC_DomeSpeed);
+		break;
+		case 2:
+		analogWrite(DD_PWN_PIN, map(RC_DomeSpeed,-150,150,0,255);
+		break;
+  }		
 }
 
 void Drive_Mix(){		//Mix Drives for Foot Drives
@@ -807,7 +815,17 @@ void lights(){ 			//Lighting modes
 
 void playsound(byte track){
   Wire.beginTransmission(body_audio);
-  Wire.write(Audio_Volume);
+  switch(Audio_Volume_CH){
+	  case -2:
+		Wire.write(30);
+		break;
+	  case -1:
+	    Wire.write(15);
+		break;
+	  default:
+	    Wire.write(Audio_Volume);
+		break;
+  }
   Wire.write(track);
   Wire.endTransmission();
  // Serial.println("\t" + String(track) + ": Sent Via I2C to ID:" + String(body_audio));

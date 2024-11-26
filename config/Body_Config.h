@@ -22,6 +22,12 @@ Foot Motor controller options
 #define Foot_Drives 1
 #define FD_PWM_LEFT  46
 #define FD_PWM_RIGHT 44
+//- fPivYLimt  : The threshold at which the pivot action starts
+//                This threshold is measured in units on the Y-axis
+//                away from the X-axis (Y=0). A greater value will assign
+//                more of the joystick's range to pivot actions.
+//                Allowable range: (0..+100)
+float fPivYLimit = 50.0;
 
 /*
 Dome Motor Control
@@ -102,12 +108,6 @@ const unsigned long idle_Timer = 300000;  // Time to wait after last called soun
 #define SHOULDER_CD 17
 #define BAUDRATE  9600
 #define BOARD_ID  0
-//- fPivYLimt  : The threshold at which the pivot action starts
-//                This threshold is measured in units on the Y-axis
-//                away from the X-axis (Y=0). A greater value will assign
-//                more of the joystick's range to pivot actions.
-//                Allowable range: (0..+100)
-float fPivYLimit = 50.0;
 
 //MB: Gripperarm amimaton variables...
 int GripperAni1a = 0; //Gripper animation counter
