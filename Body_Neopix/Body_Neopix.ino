@@ -21,6 +21,8 @@ Preprogrammed modes for each bank are
 #include <Adafruit_PWMServoDriver.h>
 #include <Wire.h>
 #include <LedControl.h>
+
+//Correct Path as needed to point to the correct files
 #include "d:\GitHub\TBN-Astromech-Controller\config\Device_Adresses.h"
 
 //Data Door Matrix

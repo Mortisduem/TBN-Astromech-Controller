@@ -5,8 +5,10 @@ Configurable varibles/const shared on multible boards
 // Adresses for I2C Items and Other I2c Item
 const int body_servos = 0x40; //Adress 64 Body board 16 channels
 const int dome_servos = 0x41; //Adress 65 Dome board 16 channels
+const int  bd1_servos = 0x42; //Adress 66 BD1 Dome rider
 const int body_lights = 0x50; // Nano in body handles Neopixs And one Matrix Array
 const int dome_lights = 0x51; // Nano Dome lights
+const int  bd1_lights = 0x52; // Nano BD1 Dome Rider lights
 const int   dome_acel = 0x53;
 const int  body_audio = 0x30; //To offload Audio contols from Hub to Nano and stop serial out delays from delaying main loop
 
@@ -33,5 +35,5 @@ const int audio_mult = 10;
 const int animation_res = 100;
 
 /* Constants for Audio file counts, Audio board and Hub board currently only use*/
-const int sound_effects = 162;
+const int sound_effects = 32;
 const int sound_songs = 10;

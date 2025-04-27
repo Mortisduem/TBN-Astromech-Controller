@@ -99,5 +99,4 @@ This is a flexible control system for 1:1 scale remote controlled Astromech that
 	- Audio_Bank_CH:
 	- Animation_Select_CH:
 	- Shoulder_Mode_CH:
-	- Trigger_CH: Switching low will trigger the selected Audio. Switching high will trigger lights
->>>>>>> Stashed changes
+	- Trigger_CH: Switching low will trigger the selected Audio. Switching high will trigger lights.

@@ -14,7 +14,7 @@ Main Hub of the Droid Control on an Arduino Mega 2650
 - Dome Cytron is PWM and Direction Pin
 - Animation Loop Handled localy
 */
-
+//Correct Path as needed to point to the correct files
 #include "d:\GitHub\TBN-Astromech-Controller\config\Body_Config.h"
 #include "d:\GitHub\TBN-Astromech-Controller\config\Device_Adresses.h"
 
@@ -191,6 +191,10 @@ void setup() {
   triggerI2C(body_lights,3);
   if(Leg_232 and Dome_Drive != 3){
 	  Serial.println("  -2-3-2 Mode Enabled");
+	  if(C_Leg_Lift){
+		Serial.println("  - Center Leg Lift Enabled");
+		home_leg_lift();
+	  }
 	  Serial.println("    - Shoulder Driver:");
 	  smartSholder.initialByte(0x55); // MDS10
 	  Serial.println("        Homing Shoulder Pos");
@@ -483,6 +487,8 @@ void homebodyservos(){
   body.setPWM(8,0,LeftDoorClose);
 }
 
+void home_leg_lift();{	// Home Center Leg
+}
 void body_motion(){	
 	Drive_Right = map(data.ch[Drive_LR_CH], r_min, r_max, -100 , 100); 
 	Drive_Forward = map(data.ch[Drive_FB_CH], r_min, r_max, -100 , 100);
@@ -492,7 +498,7 @@ void body_motion(){
 		case 10:
 			//RC PWM			
 			int pwmLeft = map(speedLeft,-100,100,0,255);
-			int pwmRight = map(speedRight.-100,100,0,255);
+			int pwmRight = map(speedRight,-100,100,0,255);
 			analogWrite(FD_PWM_LEFT, pwmLeft);
 			analogWrite(FD_PWM_RIGHT, pwmRight);
 			break;
@@ -502,7 +508,7 @@ void body_motion(){
 	}
   
 	if(Shoulder_homed and Leg_232){
-		moveSholders();
+		Leg_Mode_Change();
 	}
 	dome_move();
 	arms();
@@ -527,7 +533,7 @@ void dome_move(){		//Move Dome
 		analogWrite(DD_PWN_PIN, RC_DomeSpeed);
 		break;
 		case 2:
-		analogWrite(DD_PWN_PIN, map(RC_DomeSpeed,-150,150,0,255);
+		analogWrite(DD_PWN_PIN, map(RC_DomeSpeed,-150,150,0,255));
 		break;
   }		
 }
@@ -575,7 +581,11 @@ void Drive_Mix(){		//Mix Drives for Foot Drives
 	}
 }
 
-void moveSholders() { 	//Switch between 2-3 leg modes
+void Leg_Mode_Change() {
+
+}
+
+void shoulder_move(){ 	//Switch between 2-3 leg modes
 	RF = digitalRead(51);
 	RR = digitalRead(53);
 	LF = digitalRead(50);
@@ -738,9 +748,6 @@ void audio() { 			// Audio Control
 			case 9:
 				Serial.print("Pedro Pedro Pedro Mode Active! ");
 				Animation_Pedro = currentMillis;
-				//triggerI2C(body_lights,9);
-				//Dome_Animating == 1;
-				//Dome_Start == millis();
               break;
 			case 0:
 				if (ani_clock != 0){
@@ -1017,7 +1024,7 @@ void Ani_Padreo(){
       body.setPWM(8,0, LeftDoorClose);
       body.setPWM(1,0, RightDoorClose);
   		body.setPWM(4,0,UtlityLowwerClose);
-		body.setPWM(5,0,UtlityUpperClose);
+		  body.setPWM(5,0,UtlityUpperClose);
       Animation_Pedro = 0;
     }
   }

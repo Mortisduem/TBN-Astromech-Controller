@@ -42,10 +42,11 @@ Dome Motor Control
 
 /*
 Shoulder Motor Control currently only suports the Cytron MDDS10 for basic switching of legs between 2 and 3 leg mode
-Leg_Slow is the pressentage to slow down drive speed, only used while not in 3 leg mode with back endstops triggered and 2-3-2 option is enabled
+Leg_Slow is the pressentage to slow down drive speed, only used while not in 3 leg mode with leg back endstops triggered and 2-3-2 option is enabled
 */
 #define Leg_232 1
-const int Leg_Slow = 50;
+#define C_Leg_Lift 1
+const int Leg_Slow = 25;
 
 /*
 Dome Accerator is intended to use an Adafruit ADXL345 mounted on the dome of the droid to allow easier locking of the direction of the dome while turing the body not enabled yet.
@@ -180,11 +181,13 @@ bool bad_bus; //set TRUE if SBUS or IBUS data reads outside of range set
 int SD_Left = 0;
 int SD_Right = 0;
 int Shoulder_Pos = 0;
-int Shoulder_Target = -1;
+int Center_Pos = 0;
+int Leg_Target = -1;
 bool RF;
 bool RR;
 bool LF;
 bool LR;
+bool CL;
 bool Shoulder_homed = true;
 
 //MB: Holoprojector amimaton variables...

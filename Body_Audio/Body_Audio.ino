@@ -10,6 +10,8 @@ Audio Control to be located in the body of the droid.
 #include <Arduino.h>
 #include <Wire.h>
 #include <math.h>
+
+//Correct Path as needed to point to the correct files
 #include "d:\GitHub\TBN-Astromech-Controller\config\Device_Adresses.h"
 #include "DYPlayerArduino.h"
 
