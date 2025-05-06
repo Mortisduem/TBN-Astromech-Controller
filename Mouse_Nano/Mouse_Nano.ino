@@ -19,7 +19,7 @@ Audio Control to be located in the body of the droid.
 /* Constants for Audio file counts, Audio board and Hub board currently only use*/
 
 const int loop_delay = 16; 
-const int sound_effects = 32;
+const int sound_effects = 41;
 const int sound_songs = 10;
 
 #define RC_NUM_CHANNELS  6
@@ -46,7 +46,7 @@ volatile uint16_t rc_shared[RC_NUM_CHANNELS];
 
 #define INPUT_SIZE 30
 
-float inch1, inch2, inch3, inch4, inch5, inch6;
+byte inch1, inch2, inch3, inch4, inch5, inch6;
 
 float CH1, CH2, CH3, CH4, CH5, CH6;
 
@@ -80,19 +80,6 @@ void setup() {
   pinMode(RC_CH5_INPUT, INPUT);
   pinMode(RC_CH6_INPUT, INPUT);
 
-  enableInterrupt(RC_CH1_INPUT, calc_ch1, CHANGE);
-  enableInterrupt(RC_CH2_INPUT, calc_ch2, CHANGE);
-  enableInterrupt(RC_CH3_INPUT, calc_ch3, CHANGE);
-  enableInterrupt(RC_CH4_INPUT, calc_ch4, CHANGE);
-  enableInterrupt(RC_CH5_INPUT, calc_ch5, CHANGE);
-  enableInterrupt(RC_CH6_INPUT, calc_ch6, CHANGE);
-  
-  inch1 = rc_values[RC_CH1]; // read and store channel value from receiver
-  inch2 = rc_values[RC_CH2];
-  inch3 = rc_values[RC_CH3];
-  inch4 = rc_values[RC_CH4];
-  inch5 = rc_values[RC_CH5];
-  inch6 = rc_values[RC_CH6];
 
 
 }
@@ -104,7 +91,7 @@ void loop() {
 		player.playSpecified(int(new_track));
 		last_track = new_track;
 	}
-	rc_read_values();
+	//rc_read_values();
 	
 	
 	beta = (millis()- currentMillis);
@@ -115,26 +102,28 @@ void loop() {
 	else {
 	Serial.println("Error: Long loop of " + String(beta) + "ms is longer then " + String(loop_delay) + "ms target");
 	}
+  audio();
 }
 
 void audio() { 			// Audio Control
 	Audio_Volume 	= 	map(inch2, 1000, 2000, 0,30);
 	int track;
-	if (inch1 <= 1333 and currentMillis >= check_audio){
+  Serial.println(inch1);
+	if (inch1 != 1333 and currentMillis >= check_audio){
 		check_audio = currentMillis + audio_delay;
-		if (inch5 <= 1333){
-			Serial.print("Low Sound bank selected: ");
-			track = map(inch1,1000,2000,0,int(sound_effects/2)) + sound_songs + 1;
+		if (inch5 = 1333){
+			//Serial.print("Low Sound bank selected: ");
+			track = map(inch1,0000,2000,0,int(sound_effects/2)) + sound_songs + 1;
 		}
 		else if (inch5 >= 1666) {
-			Serial.print("Music bank selected: ");
-			track = map(inch1,1000,2000,0,sound_songs);
+			//Serial.print("Music bank selected: ");
+			track = map(inch1,0000,2000,0,sound_songs);
 		}
 		else {
-			Serial.print("High sound bank selected: ");
-			track = map(inch1,1000,2000,int(sound_effects/2),sound_effects) + sound_songs + 1;
+			//Serial.print("High sound bank selected: ");
+			track = map(inch1,0000,2000,int(sound_effects/2),sound_effects) + sound_songs + 1;
 		}
-		Serial.println(" Playing file " + String(track));
+		//Serial.println(" Playing file " + String(track));
 		playsound(track);
 	}
 }
@@ -147,37 +136,23 @@ void playsound(int new_track) {
   last_play = currentMillis + audio_delay;
 }
 
-void rc_read_values() {
-  noInterrupts();
-  memcpy(rc_values, (const void *)rc_shared, sizeof(rc_shared));
-  interrupts();
+
+void Poll_RC(){
+  inch1  = readChannel( CH1, -100 , 100, 0); 
+  inch2  = readChannel( CH2, -100 , 100, 0);
+  inch3  = readChannel( CH3, 0,30,0);
+  inch4  = readChannel( CH4, -150 , 150, 0);   //Dome Move
+  inch5  = readChannel( CH5, 0, sound_effects, 0);
+  inch6  = readChannel( CH6, 0, 1, 0);
+  //RC_Chan7  = readChannel( CH7, -100 , 100, 0);
+  //RC_Chan8  = readChannel( CH8, -100 , 100, 0);
+  //RC_Chan9  = readChannel( CH9, -100 , 100, 0);
+  //RC_Chan10 = readChannel(CH10, -100 , 100, 0);
+
 }
 
-void calc_input(uint8_t channel, uint8_t input_pin) {
-  if (digitalRead(input_pin) == HIGH) {
-    rc_start[channel] = micros();
-  } else {
-    uint16_t rc_compare = (uint16_t)(micros() - rc_start[channel]);
-    rc_shared[channel] = rc_compare;
-  }
-}
-////////////////////////////////////////////////////////////////////////////////////////
-
-void calc_ch1() {
-  calc_input(RC_CH1, RC_CH1_INPUT);
-}
-void calc_ch2() {
-  calc_input(RC_CH2, RC_CH2_INPUT);
-}
-void calc_ch3() {
-  calc_input(RC_CH3, RC_CH3_INPUT);
-}
-void calc_ch4() {
-  calc_input(RC_CH4, RC_CH4_INPUT);
-}
-void calc_ch5() {
-  calc_input(RC_CH5, RC_CH5_INPUT);
-}
-void calc_ch6() {
-  calc_input(RC_CH6, RC_CH6_INPUT);
+int readChannel(int channelInput, int minLimit, int maxLimit, int defaultValue){
+  int ch = pulseIn(channelInput, HIGH, 30000);
+  if (ch < 100) return defaultValue;
+  return map(ch, 1000, 2000, minLimit, maxLimit);
 }
