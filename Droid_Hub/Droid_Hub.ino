@@ -507,7 +507,12 @@ void homebodyservos(){
 }
 
 void home_leg_lift(){	// Home Center Leg
-
+	unsigned long timer = millis() + Lift_timer;
+	while (millis() <= timer) {
+		digitalWrite(CENT_DIR_PIN,HIGH);
+		analogWrite(CENT_PWN_PIN, 255);
+	}
+	Center_Pos = -1;
 }
 void body_motion(){	
 	Drive_Right = map(data.ch[Drive_LR_CH], r_min, r_max, -100 , 100); 
@@ -613,10 +618,11 @@ void Leg_Mode_Change() {
 	}
 	else if (currentMillis <= Lift_timer){
 		if (lift_direction) { 
-		digitalWrite(CENT_DIR_PIN,HIGH);}
+		digitalWrite(CENT_DIR_PIN,HIGH);
+		analogWrite(CENT_PWN_PIN, 255);}
 		else{
-		digitalWrite(CENT_DIR_PIN,LOW);}
-		analogWrite(CENT_PWN_PIN, 255);
+		digitalWrite(CENT_DIR_PIN,LOW);
+		analogWrite(CENT_PWN_PIN, 255);}
 	}
 	else if (currentMillis > Lift_timer and Lift_timer != 0){
 		analogWrite(CENT_PWN_PIN, 0);
