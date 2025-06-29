@@ -33,7 +33,7 @@ Main Hub of the Droid Control on an Arduino Mega 2650
 /* SBUS object, reading SBUS */
   bfs::SbusRx sbus_rx(&Serial3);
 /* SBUS object, writing SBUS */
-//bfs::SbusTx sbus_tx(&Serial3);
+//bfs::SbusTx sbus_tx(&Serial3); //diabled atm
 /* SBUS data */
   bfs::SbusData data;
 
@@ -70,12 +70,6 @@ void setup() {
   }
  
   Serial.println("Config Settings for droid:");
-  Serial.println("   I2C Adresses set for");
-  Serial.println("\t-Body  Servos: " + String(body_servos));
-  Serial.println("\t-Body  Lights: " + String(body_lights));
-  Serial.println("\t-Body   Audio: " + String(body_audio));
-  Serial.println("\t-Dome  Servos: " + String(dome_servos));
-  Serial.println("\t-Dome  Lights: " + String(dome_lights));
   Serial.println("\t-Dome Control: TBA");
   Serial.println("   Funtions mapped to Channels:");
   Serial.println("\t  Drive L/R: "+ String(Drive_LR_CH));
@@ -90,7 +84,7 @@ void setup() {
   Serial.println("\t Audio Mode: "+ String(Audio_Mode_CH));
   Serial.println("\t  Audio Sel: "+ String(Audio_Bank_CH));
   Serial.println("\t   Anim Sel: "+ String(Animation_Select_CH));
-  Serial.println("\t Shoul Mode: "+ String(Shoulder_Mode_CH));
+  Serial.println("\t   Leg Mode: "+ String(Shoulder_Mode_CH));
   Serial.println("\t    Trigger: "+ String(Trigger_CH));
   Serial.println("Starting Boot:");  
   I2C_Bus_Setup();
@@ -193,6 +187,23 @@ void setup() {
 	  Serial.println("  -2-3-2 Mode Enabled");
 	  if(C_Leg_Lift){
 		Serial.println("  - Center Leg Lift Enabled");
+			switch(CENT_Drive){
+			case 1:
+				Serial.println("  - Starting PWM+DIR");
+				pinMode(CENT_PWN_PIN, OUTPUT); //DD_PWN_PIN for dome drive PWM
+				digitalWrite(CENT_PWN_PIN,LOW);
+				pinMode(CENT_DIR_PIN, OUTPUT); //Dome Dir
+				digitalWrite(CENT_DIR_PIN,LOW);
+				break;
+			case 2:
+				Serial.println("  - Starting PWM Drive for Dome");
+				pinMode(CENT_PWN_PIN, OUTPUT); //DD_PWN_PIN for dome drive PWM
+				digitalWrite(CENT_PWN_PIN,LOW);
+				break;
+			default:
+				Serial.println("  ERROR BAD LIFT CONFIG");
+			break;
+			}
 		home_leg_lift();
 	  }
 	  Serial.println("    - Shoulder Driver:");
@@ -233,23 +244,31 @@ void I2C_Bus_Setup(){
 			byte dump = Wire.read();
 			switch(i){
 				case body_servos :
-					Serial.println("    - body servos found "+ String(i));
+					Serial.println("    - Body servos found "+ String(i));
 					body_servo_good = true;
 					break;
 				case dome_servos :
-					Serial.println("    - dome servos found "+ String(i));
+					Serial.println("    - Dome servos found "+ String(i));
 					//dome_servo_good = true;
 					break;
 				case body_lights :
-					Serial.println("    - body lights found "+ String(i));
+					Serial.println("    - Body Lights found "+ String(i));
 					//body_lights_good = true
 					break;
 				case dome_lights :
-					Serial.println("    - dome lights found "+ String(i));
+					Serial.println("    - Dome Lights found "+ String(i));
 					//dome_lights_good = true;
 					break;
 				case body_audio :
-					Serial.println("    - body audio found "+ String(i));
+					Serial.println("    - Body Audio found "+ String(i));
+					//body_audio_good = true;
+					break;
+				case bd1_servos :
+					Serial.println("    - BD1 Servos found "+ String(i));
+					//body_audio_good = true;
+					break;
+				case bd1_lights :
+					Serial.println("    - BD1 Lights found "+ String(i));
 					//body_audio_good = true;
 					break;
 				default:
@@ -487,7 +506,8 @@ void homebodyservos(){
   body.setPWM(8,0,LeftDoorClose);
 }
 
-void home_leg_lift();{	// Home Center Leg
+void home_leg_lift(){	// Home Center Leg
+
 }
 void body_motion(){	
 	Drive_Right = map(data.ch[Drive_LR_CH], r_min, r_max, -100 , 100); 
@@ -582,7 +602,31 @@ void Drive_Mix(){		//Mix Drives for Foot Drives
 }
 
 void Leg_Mode_Change() {
-
+	//center leg movement
+	if (data.ch[Shoulder_Mode_CH] < r_swlow and Center_Pos != -1 and Lift_timer == 0) {
+		Lift_timer = currentMillis + CENT_Cycle;
+		lift_direction = true;
+	}
+	else if (data.ch[Shoulder_Mode_CH]> r_swhigh and Center_Pos != 1 and Shoulder_Pos == -1 and Lift_timer == 0){
+		Lift_timer = currentMillis + CENT_Cycle;
+		lift_direction = false;
+	}
+	else if (currentMillis <= Lift_timer){
+		if (lift_direction) { 
+		digitalWrite(CENT_DIR_PIN,HIGH);}
+		else{
+		digitalWrite(CENT_DIR_PIN,LOW);}
+		analogWrite(CENT_PWN_PIN, 255);
+	}
+	else if (currentMillis > Lift_timer and Lift_timer != 0){
+		analogWrite(CENT_PWN_PIN, 0);
+		Lift_timer = 0;
+		if (lift_direction) { 
+		Center_Pos = -1;}
+		else{
+		Center_Pos = 1;}
+	}
+		
 }
 
 void shoulder_move(){ 	//Switch between 2-3 leg modes
@@ -606,7 +650,7 @@ void shoulder_move(){ 	//Switch between 2-3 leg modes
 				Shoulder_Pos = -1;
 			}
 	}
-	else if (data.ch[Shoulder_Mode_CH]> r_swhigh and Shoulder_Pos != 1){
+	else if (data.ch[Shoulder_Mode_CH]> r_swhigh and Shoulder_Pos != 1 and Center_Pos == 1){
 			if (!LR and !RR){
 				smartSholder.control(-100, 100);
 			}

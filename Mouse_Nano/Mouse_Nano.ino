@@ -10,7 +10,7 @@ Audio Control to be located in the body of the droid.
 #include <Arduino.h>
 #include <Wire.h>
 #include <math.h>
-#include <EnableInterrupt.h>
+//#include <EnableInterrupt.h>
 
 //Correct Path as needed to point to the correct files
 //#include "d:\GitHub\TBN-Astromech-Controller\config\Device_Adresses.h"
@@ -33,12 +33,12 @@ const int sound_songs = 10;
 
 
 // Inputs from the RC receiver
-#define RC_CH1_INPUT  A0 //Head left/right
-#define RC_CH2_INPUT  A1 //Forwards/Backwards
-#define RC_CH3_INPUT  A2 //Head front/back
-#define RC_CH4_INPUT  A3 //Left/Right Steering
-#define RC_CH5_INPUT  A4 //Warning Light lift
-#define RC_CH6_INPUT  A5 //spare channel
+#define RC_CH1_INPUT  2 //Head left/right
+#define RC_CH2_INPUT  3 //Forwards/Backwards
+#define RC_CH3_INPUT  4 //Head front/back
+#define RC_CH4_INPUT  5 //Left/Right Steering
+#define RC_CH5_INPUT  6 //Warning Light lift
+#define RC_CH6_INPUT  7 //spare channel
 
 uint16_t rc_values[RC_NUM_CHANNELS];
 uint32_t rc_start[RC_NUM_CHANNELS];
@@ -102,14 +102,14 @@ void loop() {
 	else {
 	Serial.println("Error: Long loop of " + String(beta) + "ms is longer then " + String(loop_delay) + "ms target");
 	}
-  audio();
+  //audio();
 }
 
 void audio() { 			// Audio Control
 	Audio_Volume 	= 	map(inch2, 1000, 2000, 0,30);
 	int track;
   Serial.println(inch1);
-	if (inch1 != 1333 and currentMillis >= check_audio){
+	if (inch1 <= 1333 and currentMillis >= check_audio){
 		check_audio = currentMillis + audio_delay;
 		if (inch5 = 1333){
 			//Serial.print("Low Sound bank selected: ");

@@ -40,7 +40,17 @@ Dome Motor Control
 #define DD_PWN_PIN 12
 #define DD_DIR_PIN 13
 
-/*
+/*Center Leg Drive
+ 0 - No Motor Driver
+   1 - PWM + DIR for Cytron MD10C or other similar  
+   2 - PWM Only 
+*/
+  
+#define CENT_Drive 1
+#define CENT_PWN_PIN 10
+#define CENT_DIR_PIN 11
+const int CENT_Cycle = 16000; //time in miliseconds
+/*/
 Shoulder Motor Control currently only suports the Cytron MDDS10 for basic switching of legs between 2 and 3 leg mode
 Leg_Slow is the pressentage to slow down drive speed, only used while not in 3 leg mode with leg back endstops triggered and 2-3-2 option is enabled
 */
@@ -177,12 +187,15 @@ int Drive_Dome;
 int Audio_Volume = 10;
 // Sbus Varibles
 bool bad_bus; //set TRUE if SBUS or IBUS data reads outside of range set
-//Shoulder Drive Varibles
+
+//Shoulder Drive and Leg lift Varibles
 int SD_Left = 0;
 int SD_Right = 0;
 int Shoulder_Pos = 0;
 int Center_Pos = 0;
+unsigned long Lift_timer = 0;
 int Leg_Target = -1;
+bool lift_direction; 
 bool RF;
 bool RR;
 bool LF;
