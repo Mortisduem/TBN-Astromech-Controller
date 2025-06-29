@@ -35,5 +35,5 @@ const int audio_mult = 10;
 const int animation_res = 100;
 
 /* Constants for Audio file counts, Audio board and Hub board currently only use*/
-const int sound_effects = 32;
+const int sound_effects = 164;
 const int sound_songs = 10;
